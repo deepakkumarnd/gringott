@@ -9,92 +9,74 @@ here is to try to use those concepts myself.
 
 ## Command line
 
-$ gringott-cli
-
-Gringott version 0.1.0
->>
+    $ gringott-cli
+    Gringott version 0.1.0
+    >>
 
 ## Exit from the console
 
-$ exit | quit | q
+    $ exit | quit | q
 
 ## Create vault
 
 Vault is a where the data is stored, it can be considered as a bucket of key value pairs. On successful execution of 
 any write command OK is displayed in the console.
 
->> create myvault
-
-OK
+    >> create myvault
+    OK
 
 ## Using a vault
 
 On using vault the prompt will change to `valult-name >>`
 
->> use myvalult
-
-OK
-
-myvault >>
+    >> use myvalult
+    OK
+    myvault >>
 
 ## Delete a vault
 
->> drop myvault
-
-OK
+    >> drop myvault
+    OK
 
 ## List vaults
 
->> list
-
-myvault
+    >> list
+    myvault
 
 ## Set a key
 
->> set age 20
-
-OK
-
-myvault >>
+    >> set age 20
+    OK
+    myvault >>
 
 ## Get a key
 
->> get age
-
-20
+    >> get age
+    20
 
 ## Delete key
 
-myvault >> delete age
-
-OK
+    myvault >> delete age
+    OK
 
 ## Help
 
 Help command list the available commands and its usages
 
->> help
+    >> help
 
-create
-
-drop
-
-list
-
-set
-
-get
-
-delete
-
-help
-
-version
+    create
+    drop
+    list
+    set
+    get
+    delete
+    help
+    version
 
 ## version
 
 Version command shows the verison
 
->> version
-
-Gringott 0.1.0
+    >> version
+    Gringott (Key -> Value in memory data store) Version: 0.1.0
