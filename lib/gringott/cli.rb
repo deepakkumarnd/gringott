@@ -19,18 +19,22 @@ module Gringott
       loop do
         show_prompt
         command, *args = wait_for_input
-        run_command(command, args)
+        run_command(command, args) unless command.nil?
       end
     end
 
     private
 
     def welcome_message
-      "Gringott version #{VERSION}"
+      "Gringott (Key -> Value in memory data store) Version: #{VERSION}"
     end
 
     def show_prompt
       print @prompt
+    end
+
+    def set_prompt(str)
+      @prompt = str
     end
 
     def wait_for_input
@@ -39,15 +43,24 @@ module Gringott
     end
 
     def run_command(command, args)
-      if %w[q quit exit].include?(command)
+      case command
+      when 'use'
+        # Use command is defined in module Commands
+        Use.new(args).exec
+        set_prompt("#{args[0]} >> ")
+      when 'q', 'quit', 'exit'
         puts 'Bye'
         exit
+      else
+        exec_using_command_klass(command, args)
       end
+    end
 
+    def exec_using_command_klass(command, args)
       begin
         command_klass = Kernel.const_get("Gringott::Commands::#{command.capitalize}")
       rescue NameError => e
-        puts "Error: Bad command #{command}"
+        puts "Error: Bad command #{command}, type `help` to get a list of supported commands"
         return
       end
 

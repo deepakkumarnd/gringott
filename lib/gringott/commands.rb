@@ -11,7 +11,7 @@ module Gringott
       end
 
       def exec
-        puts "Executing"
+        puts "Error: Bad command, type `help` to get a list of supported commands"
       end
     end
 
@@ -19,6 +19,7 @@ module Gringott
     class Create < Command; end
     class Drop < Command; end
     class List < Command; end
+    class Use < Command; end
 
     # Data management
     class Get < Command; end
@@ -26,8 +27,22 @@ module Gringott
     class Delete < Command; end
 
     # Other
-    class Help < Command; end
-    class Version < Command; end
+
+    # Help - lists all the supported commands
+    class Help < Command
+      def exec
+        all_commands = Commands.constants.map { |c| c.to_s.downcase }
+        all_commands.delete 'command'
+        puts all_commands.sort.join("\n")
+      end
+    end
+
+    # Version - print the version
+    class Version < Command
+      def exec
+        puts "Gringott (Key -> Value in memory data store) Version: #{VERSION}"
+      end
+    end
   end
 
 end
