@@ -74,7 +74,7 @@ Help command list the available commands and its usages
     help
     version
 
-## version
+## Version
 
 Version command shows the verison
 

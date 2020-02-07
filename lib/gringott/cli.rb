@@ -3,8 +3,15 @@
 require 'singleton'
 
 module Gringott
-
   class CLI
+
+    def self.set_prompt(prompt)
+      @prompt = "#{prompt} >> "
+    end
+
+    def self.prompt
+      @prompt || '>> '
+    end
 
     include Singleton
     include Commands
@@ -30,11 +37,7 @@ module Gringott
     end
 
     def show_prompt
-      print @prompt
-    end
-
-    def set_prompt(str)
-      @prompt = str
+      print CLI.prompt
     end
 
     def wait_for_input
@@ -44,10 +47,6 @@ module Gringott
 
     def run_command(command, args)
       case command
-      when 'use'
-        # Use command is defined in module Commands
-        Use.new(args).exec
-        set_prompt("#{args[0]} >> ")
       when 'q', 'quit', 'exit'
         puts 'Bye'
         exit
@@ -64,7 +63,15 @@ module Gringott
         return
       end
 
-      command_klass.new(args).exec
+      begin
+        response = command_klass.new(args).exec
+
+        if response == 'OK'
+          puts 'OK'
+        end
+      rescue CommandError => e
+        puts "Error: While executing command #{command}, #{e.message}"
+      end
     end
 
     def parse_command(command_str)
