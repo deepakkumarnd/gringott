@@ -59,6 +59,16 @@ On using vault the prompt will change to `valult-name >>`
     myvault >> delete age
     OK
 
+## Stats about a vault
+
+    >> use potter
+    potter >> stats
+    Stats
+    vault_name => potter
+    keys => 8
+    bytes_in_memory => 232
+    potter >> q
+
 ## Help
 
 Help command list the available commands and its usages
