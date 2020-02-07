@@ -66,8 +66,8 @@ module Gringott
       begin
         response = command_klass.new(args).exec
 
-        if response == 'OK'
-          puts 'OK'
+        if (response == 'OK') || (response == 'Error')
+          puts response
         end
       rescue CommandError => e
         puts "Error: While executing command #{command}, #{e.message}"

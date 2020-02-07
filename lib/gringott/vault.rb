@@ -28,6 +28,8 @@ module Gringott
     end
 
     def set(key, value)
+      return 'Error' unless @memstore[key].nil?
+
       @memstore[key] = value
       @key_count += 1
       'OK'
@@ -38,6 +40,8 @@ module Gringott
     end
 
     def delete(key)
+      return 'Error' if @memstore[key].nil?
+
       @memstore.delete(key)
       @key_count -= 1
       'OK'
