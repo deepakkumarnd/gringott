@@ -52,6 +52,12 @@ RSpec.describe Gringott::Vault do
     expect(subject.key_count).to eq(1)
   end
 
+  it 'On setting the key two times with different values does not change the key count' do
+    subject.set("fullname", 'Harry Potter')
+    subject.set("fullname", 'Albus Dumbledore')
+    expect(subject.key_count).to eq(1)
+  end
+
   it 'On deleting the key two times does not decrement the key count' do
     subject.set("fullname", 'Harry Potter')
     subject.delete("fullname")

@@ -1,4 +1,5 @@
 require 'objspace'
+require 'gringott/memstore'
 
 module Gringott
 
@@ -8,7 +9,7 @@ module Gringott
     attr_reader :key_count
 
     def initialize(name)
-      @memstore = {}
+      @memstore = Memstore.new
       @key_count = 0
 
       if Dir.exist? "#{name}.vt"
@@ -28,15 +29,19 @@ module Gringott
     end
 
     def set(key, value)
-      return 'Error' unless @memstore[key].nil?
+      old_value = @memstore.get(key)
 
-      @memstore[key] = value
-      @key_count += 1
-      'OK'
+      if old_value.nil?
+        @memstore.set(key, value)
+        @key_count += 1
+        'OK'
+      elsif old_value != value
+        @memstore.set(key, value)
+      end
     end
 
     def get(key)
-      @memstore[key]
+      @memstore.get(key)
     end
 
     def delete(key)
