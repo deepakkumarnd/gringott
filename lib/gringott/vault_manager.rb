@@ -1,4 +1,5 @@
 require 'singleton'
+require 'gringott/goblin'
 
 module Gringott
 
@@ -10,6 +11,13 @@ module Gringott
 
     def use_vault(vault_name)
       @current_vault = Vault.new(vault_name)
+      # Kill the previous instanace of goblin
+      @goblin.kill unless @goblin.nil?
+
+      # start a new instance of goblin
+      @goblin = Thread.new do
+        Goblin.start(@current_vault)
+      end
     end
 
     def drop_vault(vault_name)
@@ -35,7 +43,7 @@ module Gringott
     # Data manipulation commands
     def get(key)
       vault_selected!
-      @current_vault.get(key)
+      value = @current_vault.get(key)
     end
 
     def set(key, value)

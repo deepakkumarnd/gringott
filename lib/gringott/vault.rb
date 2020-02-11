@@ -6,7 +6,7 @@ module Gringott
   # A vault is where the data is stored, it is analogous to a bucket of key value pairs
   class Vault
 
-    attr_reader :key_count
+    attr_reader :key_count, :memstore
 
     def initialize(name)
       @memstore = Memstore.new
@@ -21,6 +21,10 @@ module Gringott
 
     def vault_name
       @v_name
+    end
+
+    def vault_dir
+      "#{@v_name}.vt"
     end
 
     def bytes_in_memory
@@ -41,11 +45,21 @@ module Gringott
     end
 
     def get(key)
-      @memstore.get(key)
+      value = @memstore.get(key)
+
+      if value.nil?
+        hash_code = @memstore.to_hash_code(key)
+        if File.exist?("#{vault_dir}/#{hash_code}")
+          value = File.read("#{vault_dir}/#{hash_code}")
+          set(key, value)
+        end
+      end
+
+      value
     end
 
     def delete(key)
-      return 'Error' if @memstore[key].nil?
+      return 'Error' if @memstore.get(key).nil?
 
       @memstore.delete(key)
       @key_count -= 1
