@@ -21,8 +21,11 @@ module Gringott
     def get(key)
       hash_code = to_hash_code(key)
 
-      if @hashstore[hash_code] && !@hashstore[hash_code].is_deleted
-        @hashstore[hash_code].value
+      if obj = @hashstore[hash_code]
+        unless obj.is_deleted
+          obj.last_accessed_at = Time.now
+          obj.value
+        end
       end
     end
 
@@ -33,7 +36,7 @@ module Gringott
 
     def delete(key)
       hash_code = to_hash_code(key)
-      @hashstore[hash_code] && @hashstore[hash_code].is_deleted = true
+      (obj = @hashstore[hash_code]) && (obj.is_deleted = true)
     end
 
     def to_hash_code(key)
